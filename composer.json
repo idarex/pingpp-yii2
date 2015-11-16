@@ -1,0 +1,20 @@
+{
+  "name": "idarex/pingpp-yii2",
+  "description": "ping plus plus yii2",
+  "keywords": [],
+  "type": "library",
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=5.4.0",
+    "pingplusplus/pingpp-php": "dev-master",
+    "yiisoft/yii2": "*"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "idarex\\pingppyii2\\": "./src"
+    }
+  }
+}
