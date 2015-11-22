@@ -11,6 +11,7 @@
     "yiisoft/yii2": "*"
   },
   "require-dev": {
+    "phpunit/phpunit": "*"
   },
   "autoload": {
     "psr-4": {
