@@ -46,9 +46,13 @@ class Hooks extends Component
     {
         $headers = Yii::$app->request->getHeaders();
         $signature = $headers->get('x-pingplusplus-signature');
-        $this->_publicKey;
 
-        return openssl_verify($rawData, base64_decode($signature), $this->_publicKey, OPENSSL_ALGO_SHA256) === 1;
+        return self::verifySign($rawData, $signature, $this->_publicKey);
+    }
+
+    public static function verifySign($rawData, $signature, $publicKey)
+    {
+        return openssl_verify($rawData, base64_decode($signature), $publicKey, OPENSSL_ALGO_SHA256) === 1;
     }
 
     protected $event;
