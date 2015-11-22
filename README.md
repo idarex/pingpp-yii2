@@ -3,6 +3,14 @@ Pingpp Extension for Yii2
 
 基于 Ping++ 官方的 SDK 进行了简单的封装，用于 Yii2 框架。
 
+[![Build Status](https://travis-ci.org/idarex/pingpp-yii2.svg)](https://travis-ci.org/idarex/pingpp-yii2)
+[![Code Climate](https://codeclimate.com/github/idarex/pingpp-yii2/badges/gpa.svg)](https://codeclimate.com/github/idarex/pingpp-yii2)
+[![Issue Count](https://codeclimate.com/github/idarex/pingpp-yii2/badges/issue_count.svg)](https://codeclimate.com/github/idarex/pingpp-yii2)
+[![Latest Stable Version](https://poser.pugx.org/idarex/pingpp-yii2/version)](https://packagist.org/packages/idarex/pingpp-yii2)
+[![Latest Unstable Version](https://poser.pugx.org/idarex/pingpp-yii2/v/unstable)](//packagist.org/packages/idarex/pingpp-yii2)
+[![Total Downloads](https://poser.pugx.org/idarex/pingpp-yii2/downloads)](https://packagist.org/packages/idarex/pingpp-yii2)
+[![License](https://poser.pugx.org/idarex/pingpp-yii2/license)](https://packagist.org/packages/idarex/pingpp-yii2)
+
 Installation
 --------------------
 
