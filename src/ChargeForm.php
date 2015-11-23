@@ -34,7 +34,7 @@ class ChargeForm extends Model
     /**
      * @var 特定渠道发起交易时需要的额外参数以及部分渠道支付成功返回的额外参数。
      */
-    public $extra;
+    public $extra = [];
 
     /**
      * @var 订单失效时间，用 Unix 时间戳表示。时间范围在订单创建后的 1 分钟到 15 天，默认为 1 天，创建时间以 Ping++ 服务器时间为准。 微信对该参数的有效值限制为 2 小时内；银联对该参数的有效值限制为 1 小时内。
@@ -82,6 +82,7 @@ class ChargeForm extends Model
                 'client_ip' => $this->client_ip,
                 'subject' => $this->subject,
                 'body' => $this->body,
+                'extra' => $this->extra,
             ]);
 
             return $data;
