@@ -4,6 +4,7 @@ namespace idarex\pingppyii2;
 
 use Yii;
 use yii\base\Component;
+use yii\base\InvalidConfigException;
 use Pingpp\Pingpp;
 
 class PingppComponent extends Component

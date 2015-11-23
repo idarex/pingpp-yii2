@@ -1,39 +1,39 @@
 <?php
 
 use idarex\pingppyii2\PingppComponent;
-use idarex\pingppyii2\ChargeEvent;
-use idarex\pingppyii2\Channel;
-use idarex\pingppyii2\Charge;
+use yii\base\InvalidConfigException;
 
 class PingppComponentTest extends PHPUnit_Framework_TestCase
 {
-    public $chargeData = [
-        'order_no' => '123',
-        'channel' => Channel::WX,
-        'amount' => '1',
-    ];
-
     /**
-     * @var PingppComponent
+     * @expectedException \yii\base\InvalidConfigException
      */
-    private $_component;
-
-    public function setUp()
+    public function testInvalidException()
     {
-        $this->_component = Yii::createObject([
+        Yii::createObject([
             'class' => PingppComponent::className(),
-            'apiKey' => 'sk_test_ibbTe5jLGCi5rzfH4OqPW9KC',
-            'appId' => 'app_1Gqj58ynP0mHeX1q',
         ]);
     }
 
-    public function testCharge()
+    /**
+     * @expectedException \yii\base\InvalidConfigException
+     */
+    public function testInvalidExceptionWithEmptyAppId()
     {
-        $charge = new Charge;
-        $charge->component = $this->_component;
-        $charge->load($this->chargeData);
-        if ($charge->validate() && $charge->create()) {
-            echo 'ok';
-        }
+        Yii::createObject([
+            'class' => PingppComponent::className(),
+            'apiKey' => 'sk_test_ibbTe5jLGCi5rzfH4OqPW9KC',
+        ]);
+    }
+
+    /**
+     * @expectedException \yii\base\InvalidConfigException
+     */
+    public function testInvalidExceptionWithEmptyApiKey()
+    {
+        Yii::createObject([
+            'class' => PingppComponent::className(),
+            'appId' => 'app_1Gqj58ynP0mHeX1q',
+        ]);
     }
 }
