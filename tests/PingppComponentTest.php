@@ -1,7 +1,7 @@
 <?php
 
 use idarex\pingppyii2\PingppComponent;
-use yii\base\InvalidConfigException;
+use idarex\pingppyii2\ChargeForm;
 
 class PingppComponentTest extends PHPUnit_Framework_TestCase
 {
@@ -35,5 +35,27 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
             'class' => PingppComponent::className(),
             'appId' => 'app_1Gqj58ynP0mHeX1q',
         ]);
+    }
+
+    public function testRefunds()
+    {
+        $amount = 1;
+        $desc = 'idarex pingpp-yii tests Refund Description';
+        $data = Yii::$app->pingpp->refunds(Yii::$app->params['refunds.chId'], $amount, $desc);
+        $this->compareDocs($data, 'Refunds');
+    }
+
+    public function testRetrieve()
+    {
+        $data = Yii::$app->pingpp->retrieve(Yii::$app->params['retrieve.chId']);
+        $this->compareDocs($data, 'Retrieve');
+    }
+
+    protected function compareDocs($rawData, $class = '')
+    {
+        $reflectionClass = new ReflectionClass('\idarex\pingppyii2\CodeAutoCompletion\\' . $class);
+        $properties = $reflectionClass->getDefaultProperties();
+
+        $this->assertTrue(array_diff_key($rawData->__toArray(), $properties) == []);
     }
 }

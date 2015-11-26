@@ -85,11 +85,17 @@ if ($response = $chargeForm->create()) {
 
 ##### 退款
 
-coming soon
+```php
+\Yii::$app->pingpp->refunds($chId, $amount, $description);
+```
 
 ##### 查询
 
-coming soon
+查询单笔交易
+
+```php
+\Yii::$app->pingpp->retrieve($chId);
+```
 
 #### 红包
 
