@@ -68,6 +68,10 @@ class ChargeForm extends Model
         ];
     }
 
+    /**
+     * @return bool|\Pingpp\Charge|CodeAutoCompletion\Charge
+     * @throws \Exception
+     */
     public function create()
     {
         if ($this->validate()) {

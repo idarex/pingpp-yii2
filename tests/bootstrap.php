@@ -17,3 +17,6 @@ if (file_exists(dirname(__DIR__) . '/vendor/yiisoft/yii2/Yii.php')) {
 } elseif (file_exists('../../vendor/yiisoft/yii2/Yii.php')) {
     require_once('../../vendor/yiisoft/yii2/Yii.php');
 }
+
+$config = require_once('main.php');
+$application = new yii\console\Application($config);

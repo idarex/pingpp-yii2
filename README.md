@@ -85,11 +85,17 @@ if ($response = $chargeForm->create()) {
 
 ##### 退款
 
-coming soon
+```php
+\Yii::$app->pingpp->refunds($chId, $amount, $description);
+```
 
 ##### 查询
 
-coming soon
+查询单笔交易
+
+```php
+\Yii::$app->pingpp->retrieve($chId);
+```
 
 #### 红包
 
@@ -232,3 +238,10 @@ class PingppHooks extends Hooks implements HooksInterface
     }
 }
 ```
+
+Tricks
+--------------------
+
+* 给配置的组件加 IDE 自动补全 [IDE autocompletion for custom components](https://github.com/samdark/yii2-cookbook/blob/master/book/ide-autocompletion.md)
+* 手动标记一个测试环境的订单为已支付，使用 `GET` 请求 `https://api.pingxx.com/notify/charges/CHARGE_ID?livemode=false`
+* 调用组件的相应方法后，会有对该接口返回值的对象属性自动补全功能

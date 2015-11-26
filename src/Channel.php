@@ -49,6 +49,7 @@ class Channel
         self::YEEPAY_WAP,
         self::JDPAY_WAP,
         self::ALIPAY_PC_DIRECT,
+        self::UPACP_PC,
         self::WX_PUB_QR,
     ];
 
