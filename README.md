@@ -52,7 +52,9 @@ return [
 使用
 --------------------
 
-#### 发起支付请求
+#### 支付
+
+##### 付款
 
 ```php
 use Yii;
@@ -80,6 +82,34 @@ if ($response = $chargeForm->create()) {
     throw new ServerErrorHttpException();
 }
 ```
+
+##### 退款
+
+coming soon
+
+##### 查询
+
+coming soon
+
+#### 红包
+
+##### 发送红包
+
+coming soon
+
+##### 查询红包
+
+coming soon
+
+#### 微信企业付款
+
+##### 付款
+
+coming soon
+
+##### 查询
+
+coming soon
 
 #### 接收 Webhooks 通知
 
