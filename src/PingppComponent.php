@@ -59,12 +59,44 @@ class PingppComponent extends Component
 
     /**
      * 查询 Charge 对象列表
+     * @param array $params
      * @param array $options
      * @return CodeAutoCompletion\ListObj
      */
-    public function chargeList($options = [])
+    public function chargeList($params = [], $options = [])
     {
-        return Charge::all($options);
+        return Charge::all($params, $options);
+    }
+
+    /**
+     * 查询单笔退款
+     *
+     * @param $chId
+     * @param $refundId
+     * @param array $params
+     * @param array $opts
+     * @return CodeAutoCompletion\Refund
+     */
+    public function refundRetrieve($chId, $refundId, $params = null, $opts = null)
+    {
+        $refunds = $this->getRefunds($chId);
+
+        return $refunds->retrieve($refundId, $params, $opts);
+    }
+
+    /**
+     * 查询退款列表
+     *
+     * @param string $chId
+     * @param array $params
+     * @param array $opts
+     * @return CodeAutoCompletion\ListObj
+     */
+    public function refundRetrieveList($chId, $params = null, $opts = null)
+    {
+        $refunds = $this->getRefunds($chId);
+
+        return $refunds->all($params, $opts);
     }
 
     /**

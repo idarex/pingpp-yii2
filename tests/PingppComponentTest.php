@@ -42,7 +42,7 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
         $amount = 1;
         $desc = 'idarex pingpp-yii tests Refund Description';
         $data = Yii::$app->pingpp->refunds(Yii::$app->params['refunds.chId'], $amount, $desc);
-        $this->compareDocs($data, 'Refunds');
+        $this->compareDocs($data, 'Refund');
     }
 
     public function testRetrieve()
@@ -53,15 +53,35 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
 
     public function testChargeList()
     {
-        $options = [
+        $params = [
             'limit' => 1,
         ];
 
-        $data = Yii::$app->pingpp->chargeList($options);
-        if (!empty($data)) {
-            $data = array_pop($data);
+        $list = Yii::$app->pingpp->chargeList($params);
+        $this->compareDocs($list, 'ListObj');
+        if (isset($list->data[0])) {
+            $this->compareDocs($list->data[0], 'Charge');
         }
-        $this->compareDocs($data, 'Charge');
+    }
+
+    public function testRefundRetrieve()
+    {
+        $data = Yii::$app->pingpp->refundRetrieve(
+            Yii::$app->params['retrieve.chId'],
+            Yii::$app->params['refunds.reId']
+        );
+        $this->compareDocs($data, 'Refund');
+    }
+
+    public function testRefundRetrieveList()
+    {
+        $list = Yii::$app->pingpp->refundRetrieveList(
+            Yii::$app->params['retrieve.chId']
+        );
+        $this->compareDocs($list, 'ListObj');
+        if (isset($list->data[0])) {
+            $this->compareDocs($list->data[0], 'Refund');
+        }
     }
 
     protected function compareDocs($rawData, $class = '')

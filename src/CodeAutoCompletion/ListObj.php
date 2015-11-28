@@ -7,6 +7,10 @@ use Pingpp\Object;
 class ListObj extends Object
 {
     /**
+     * @var string name of the object
+     */
+    public $object;
+    /**
      * @var string
      */
     public $url;
@@ -15,8 +19,8 @@ class ListObj extends Object
      */
     public $has_more;
     /**
-     * @var array Charge List
-     * @see Charge
+     * @var array
+     * @see Charge|Refund
      */
     public $data;
 }

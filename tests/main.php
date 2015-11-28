@@ -6,6 +6,7 @@ $params = [
     // https://api.pingxx.com/notify/charges/CHARGE_ID?livemode=false
     'refunds.chId' => 'ch_OKuHKCzrLWvLSSKinHj1uf1S',
     'retrieve.chId' => 'ch_OKuHKCzrLWvLSSKinHj1uf1S',
+    'refunds.reId' => 're_bXD0yHWrH4S0envrD8iHSOKO',
 ];
 return [
     'id' => 'tests',
