@@ -7,68 +7,58 @@ class PingppHooksComponent extends Hooks implements HooksInterface
 {
 
     /**
-     *      * @inheritdoc
-     *           */
+     * @inheritdoc
+     */
     public function onAvailableDailySummary()
     {
-        Yii::$app->end();
     }
 
     /**
-     *      * @inheritdoc
-     *           */
+     * @inheritdoc
+     */
     public function onAvailableWeeklySummary()
     {
-        Yii::$app->end();
     }
 
     /**
-     *      * @inheritdoc
-     *           */
+     * @inheritdoc
+     */
     public function onAvailableMonthlySummary()
     {
-        Yii::$app->end();
     }
 
     /**
-     *      * @inheritdoc
-     *           */
+     * @inheritdoc
+     */
     public function onSucceededCharge()
     {
-        $orderId = $this->event->data->object->order_no;
-        Yii::$app->getResponse()->data = 'finished job';
-        Yii::$app->end();
     }
 
     /**
-     *      * @inheritdoc
-     *           */
+     * @inheritdoc
+     */
     public function onSucceededRefund()
     {
-        Yii::$app->end();
     }
 
     /**
-     *      * @inheritdoc
-     *           */
+     * @inheritdoc
+     */
     public function onSucceededTransfer()
     {
-        Yii::$app->end();
     }
 
     /**
-     *      * @inheritdoc
-     *           */
+     * @inheritdoc
+     */
     public function onSentRedEnvelope()
     {
-        Yii::$app->end();
     }
 
     /**
-     *      * @inheritdoc
-     *           */
+     * @inheritdoc
+     */
     public function onReceivedRedEnvelope()
     {
-        Yii::$app->end();
     }
 }

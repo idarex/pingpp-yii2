@@ -19,6 +19,10 @@ class Hooks extends Component
      * @var PingppComponent|string the PingppComponent object or the ID of the pingpp application component
      */
     public $pingpp = 'pingpp';
+    protected $event;
+    public $rawData;
+    public $headers;
+    public $signature;
 
     private $_publicKey;
 
@@ -44,8 +48,8 @@ class Hooks extends Component
 
     public function verify($rawData)
     {
-        $headers = Yii::$app->request->getHeaders();
-        $signature = $headers->get('x-pingplusplus-signature');
+        $headers = $this->headers === null ? Yii::$app->request->getHeaders() : $this->headers;
+        $signature = $this->signature === null ? $headers->get('x-pingplusplus-signature') : $this->signature;
 
         return self::verifySign($rawData, $signature, $this->_publicKey);
     }
@@ -55,11 +59,9 @@ class Hooks extends Component
         return openssl_verify($rawData, base64_decode($signature), $publicKey, OPENSSL_ALGO_SHA256) === 1;
     }
 
-    protected $event;
-
     public function run()
     {
-        $rawData = Yii::$app->getRequest()->getRawBody();
+        $rawData = $this->rawData === null ? Yii::$app->getRequest()->getRawBody() : $this->rawData;
         if (!$this->verify($rawData)) {
             throw new ForbiddenHttpException;
         }
@@ -69,8 +71,12 @@ class Hooks extends Component
             throw new BadRequestHttpException;
         }
         $this->event = $event;
+        $this->route($event->type);
+    }
 
-        switch ($event->type) {
+    public function route($type)
+    {
+        switch ($type) {
             case HooksInterface::SUMMARY_DAILY_AVAILABLE:
                 $this->onAvailableDailySummary();
                 break;
@@ -101,16 +107,20 @@ class Hooks extends Component
         }
     }
 
+    private $componentInstance;
+
     public function getComponent()
     {
-        if (is_string($this->pingpp) && Yii::$app) {
-            $component = Yii::$app->get($this->queryCache, false);
-        } else {
-            $component = $this->pingpp;
+        if ($this->componentInstance === null) {
+            if (is_string($this->pingpp) && Yii::$app->has($this->pingpp)) {
+                $this->componentInstance = Yii::$app->get($this->pingpp, false);
+            } elseif ($this->pingpp instanceof PingppComponent) {
+                $this->componentInstance = $this->pingpp;
+            } else {
+                throw new InvalidConfigException('The pingpp must be string name of PingppComponent or PingppComponent Object.');
+            }
         }
 
-        if ($component instanceof PingppComponent) {
-            return $component;
-        }
+        return $this->componentInstance;
     }
 }
