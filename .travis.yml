@@ -5,7 +5,7 @@ php:
 
 install:
   - composer global require "fxp/composer-asset-plugin:1.0.0"
-  - composer global require codeclimate/php-test-reporter --dev
+  - composer global require codeclimate/php-test-reporter
   - composer install
 
 script:
