@@ -2,7 +2,9 @@
 
 namespace idarex\pingppyii2\CodeAutoCompletion;
 
-class Charge
+use Pingpp\Object;
+
+class Charge extends Object
 {
     public $id;
     public $object;

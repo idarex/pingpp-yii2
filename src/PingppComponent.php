@@ -33,7 +33,7 @@ class PingppComponent extends Component
      * @param string $chId
      * @param integer $amount
      * @param string $description
-     * @return CodeAutoCompletion\Refunds|\Pingpp\Object
+     * @return CodeAutoCompletion\Refunds
      */
     public function refunds($chId, $amount, $description)
     {
@@ -52,7 +52,7 @@ class PingppComponent extends Component
      * 查询单笔交易
      *
      * @param $chId
-     * @return array|Charge|CodeAutoCompletion\Retrieve
+     * @return CodeAutoCompletion\Retrieve
      */
     public function retrieve($chId)
     {
