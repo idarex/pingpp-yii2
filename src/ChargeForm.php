@@ -112,7 +112,7 @@ class ChargeForm extends Model
         return false;
     }
 
-    private $_component;
+    private $componentInstance;
 
     /**
      * @return PingppComponent|null|object|string
@@ -120,14 +120,14 @@ class ChargeForm extends Model
      */
     public function getComponent()
     {
-        if ($this->_component !== null) {
-            return $this->_component;
+        if ($this->componentInstance !== null) {
+            return $this->componentInstance;
         }
 
         if (is_string($this->component)) {
-            return $this->_component = Yii::$app->get($this->component);
+            return $this->componentInstance = Yii::$app->get($this->component);
         } elseif ($this->component instanceof PingppComponent) {
-            return $this->_component = $this->component;
+            return $this->componentInstance = $this->component;
         }
         throw new InvalidConfigException('ping plus plus component config error.');
     }
