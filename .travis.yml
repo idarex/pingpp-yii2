@@ -13,7 +13,7 @@ script:
 
 addons:
   code_climate:
-  repo_token: 50c5f39d1236ff659d85b678f01a72e15bd5f7f9b9dd44baadf560e1cc8dd90d
+    repo_token: 50c5f39d1236ff659d85b678f01a72e15bd5f7f9b9dd44baadf560e1cc8dd90d
 
 after_script:
   - vendor/bin/test-reporter
