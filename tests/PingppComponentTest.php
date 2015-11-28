@@ -1,7 +1,6 @@
 <?php
 
 use idarex\pingppyii2\PingppComponent;
-use idarex\pingppyii2\ChargeForm;
 
 class PingppComponentTest extends PHPUnit_Framework_TestCase
 {

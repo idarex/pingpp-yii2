@@ -1,7 +1,5 @@
 <?php
 
-use idarex\pingppyii2\PingppComponent;
-use yii\base\InvalidConfigException;
 use idarex\pingppyii2\HooksAction;
 
 class HooksActionTest extends PHPUnit_Framework_TestCase
