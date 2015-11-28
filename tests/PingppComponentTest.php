@@ -51,11 +51,25 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
         $this->compareDocs($data, 'Retrieve');
     }
 
+    public function testChargeList()
+    {
+        $options = [
+            'limit' => 1,
+        ];
+
+        $data = Yii::$app->pingpp->chargeList($options);
+        if (!empty($data)) {
+            $data = array_pop($data);
+        }
+        $this->compareDocs($data, 'Charge');
+    }
+
     protected function compareDocs($rawData, $class = '')
     {
         $reflectionClass = new ReflectionClass('\idarex\pingppyii2\CodeAutoCompletion\\' . $class);
         $properties = $reflectionClass->getDefaultProperties();
+        $data = is_object($rawData) ? $rawData->__toArray() : $rawData;
 
-        $this->assertTrue(array_diff_key($rawData->__toArray(), $properties) == []);
+        $this->assertTrue(array_diff_key($data, $properties) == []);
     }
 }

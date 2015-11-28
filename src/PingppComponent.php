@@ -58,4 +58,14 @@ class PingppComponent extends Component
     {
         return Charge::retrieve($chId);
     }
+
+    /**
+     * 查询 Charge 对象列表
+     * @param array $options;
+     * @return CodeAutoCompletion\ListObj
+     */
+    public function chargeList($options = [])
+    {
+        return Charge::all($options);
+    }
 }
