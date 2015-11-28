@@ -95,6 +95,27 @@ if ($response = $chargeForm->create()) {
 
 ```php
 \Yii::$app->pingpp->retrieve($chId);
+
+```
+
+查询交易列表
+
+```php
+$params = ['limit' => 1,];
+\Yii::$app->pingpp->chargeList($params);
+```
+
+查询单笔退款
+
+```php
+\Yii::$app->pingpp->refundRetrieve($chId, $refundId);
+```
+
+查询退款列表
+
+```php
+$params = ['limit' => 1];
+\Yii::$app->pingpp->refundRetrieveList($chId, $params);
 ```
 
 #### 红包
