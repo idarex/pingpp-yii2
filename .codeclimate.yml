@@ -1,1 +1,14 @@
-src/CodeAutoCompletion/*
+---
+engines:
+  fixme:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
+  phpmd:
+    enabled: true
+ratings:
+  paths:
+  - "**.php"
+exclude_paths:
+- tests/**/*
+- src/CodeAutoCompletion/*
