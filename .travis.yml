@@ -9,7 +9,7 @@ install:
   - composer install
 
 script:
-  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - php -dzend_extension=xdebug.so ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 addons:
   code_climate:
