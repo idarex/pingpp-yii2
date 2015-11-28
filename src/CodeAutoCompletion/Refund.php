@@ -3,7 +3,7 @@ namespace idarex\pingppyii2\CodeAutoCompletion;
 
 use Pingpp\Object;
 
-class Refunds extends Object
+class Refund extends Object
 {
     public $id;
     public $object;

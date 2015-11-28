@@ -33,13 +33,11 @@ class PingppComponent extends Component
      * @param string $chId
      * @param integer $amount
      * @param string $description
-     * @return CodeAutoCompletion\Refunds
+     * @return CodeAutoCompletion\Refund
      */
     public function refunds($chId, $amount, $description)
     {
-        /* @var \Pingpp\Collection $refunds */
-        $refunds = Charge::retrieve($chId)->refunds;
-
+        $refunds = $this->getRefunds($chId);
         $data = $refunds->create([
             'amount' => $amount,
             'description' => $description,
@@ -61,11 +59,20 @@ class PingppComponent extends Component
 
     /**
      * 查询 Charge 对象列表
-     * @param array $options;
+     * @param array $options
      * @return CodeAutoCompletion\ListObj
      */
     public function chargeList($options = [])
     {
         return Charge::all($options);
+    }
+
+    /**
+     * @param $chId
+     * @return \Pingpp\Collection
+     */
+    protected function getRefunds($chId)
+    {
+        return Charge::retrieve($chId)->refunds;
     }
 }
