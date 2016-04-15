@@ -2,6 +2,7 @@
 
 namespace idarex\pingppyii2;
 
+use Pingpp\Charge;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use Yii;
@@ -19,7 +20,6 @@ class ChargeForm extends Model
      * @example 人民币为分（如订单总金额为 1 元，此处请填 100）。
      */
     public $amount;
-    public $app_id;
     public $channel;
     /**
      * @var string 三位 ISO 货币代码
@@ -86,13 +86,18 @@ class ChargeForm extends Model
     }
 
     /**
+     * @var Charge
+     */
+    private $_charge;
+
+    /**
      * @return bool|\Pingpp\Charge|CodeAutoCompletion\Charge
      * @throws \Exception
      */
     public function create()
     {
         if ($this->validate()) {
-            $data = \Pingpp\Charge::create([
+            $this->_charge = \Pingpp\Charge::create([
                 'order_no' => $this->order_no,
                 'amount' => $this->amount,
                 'app' => [
@@ -106,10 +111,23 @@ class ChargeForm extends Model
                 'extra' => $this->extra,
             ]);
 
-            return $data;
+            return true;
         }
 
         return false;
+    }
+
+    /**
+     * @param bool $asArray
+     * @return array|\idarex\pingppyii2\CodeAutoCompletion\Charge
+     */
+    public function getCharge($asArray = false)
+    {
+        if ($asArray) {
+            return $this->_charge->__toArray(true);
+        } else {
+            return $this->_charge->__toStdObject();
+        }
     }
 
     private $componentInstance;

@@ -2,9 +2,9 @@
 
 namespace idarex\pingppyii2\CodeAutoCompletion;
 
-use Pingpp\Object;
+use Pingpp\PingppObject;
 
-class ListObj extends Object
+class ListObj extends PingppObject
 {
     /**
      * @var string name of the object

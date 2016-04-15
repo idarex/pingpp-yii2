@@ -5,6 +5,24 @@ use idarex\pingppyii2\PingppComponent;
 class PingppComponentTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Get chId for refunds and others.
+     */
+    public static function setUpBeforeClass()
+    {
+        $chargeForm = new \idarex\pingppyii2\ChargeForm();
+        $chargeForm->load(require 'data/charge.php', '');
+        $chargeForm->create();
+
+        Yii::$app->params['refunds.chId']
+            = Yii::$app->params['retrieve.chId']
+            = $chId
+            = $chargeForm->getCharge()->id;
+
+        /* @see https://github.com/PingPlusPlus/pingpp-php/issues/24 */
+        file_get_contents("https://api.pingxx.com/notify/charges/{$chId}?livemode=false");
+    }
+
+    /**
      * @expectedException \yii\base\InvalidConfigException
      */
     public function testInvalidException()
@@ -41,6 +59,11 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
         $amount = 1;
         $desc = 'idarex pingpp-yii tests Refund Description';
         $data = Yii::$app->pingpp->refunds(Yii::$app->params['refunds.chId'], $amount, $desc);
+
+        /* @var $refund \idarex\pingppyii2\CodeAutoCompletion\Refund */
+        $refund = $data->__toStdObject();
+        Yii::$app->params['refunds.reId'] = $refund->id;
+
         $this->compareDocs($data, 'Refund');
     }
 
@@ -89,6 +112,10 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
         $properties = $reflectionClass->getDefaultProperties();
         $data = is_object($rawData) ? $rawData->__toArray() : $rawData;
 
-        $this->assertTrue(array_diff_key($data, $properties) == []);
+        $this->assertEquals(
+            [],
+            array_diff_key($data, $properties),
+            "compare docs with class: " . $reflectionClass->name
+        );
     }
 }

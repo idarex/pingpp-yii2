@@ -2,9 +2,9 @@
 
 namespace idarex\pingppyii2\CodeAutoCompletion;
 
-use Pingpp\Object;
+use Pingpp\PingppObject;
 
-class Retrieve extends Object
+class Retrieve extends PingppObject
 {
     public $id;
     public $object;

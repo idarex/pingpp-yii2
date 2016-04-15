@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'order_no' => time(),
+    'order_no' => 'pingppyii2test' . (string)time(),
     'amount' => '999999999',
     'channel' => 'upacp_pc',
     'currency' => 'cny',
