@@ -74,8 +74,8 @@ $chargeForm->client_ip = Yii::$app->getRequest()->userIP;
 $chargeForm->subject = 'Your Subject';
 $chargeForm->body = 'Your body';
 
-if ($response = $chargeForm->create()) {
-    return $response->__toArray(true);
+if ($chargeForm->create()) {
+    return $chargeForm->getCharge(true);
 } elseif ($chargeForm->hasErrors()) {
     var_dump($chargeForm->getErrors());
 } else {
