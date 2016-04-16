@@ -11,6 +11,8 @@ Pingpp Extension for Yii2
 [![Total Downloads](https://poser.pugx.org/idarex/pingpp-yii2/downloads)](https://packagist.org/packages/idarex/pingpp-yii2)
 [![License](https://poser.pugx.org/idarex/pingpp-yii2/license)](https://packagist.org/packages/idarex/pingpp-yii2)
 
+[CHANGE LOG](CHANGELOG.md)
+
 Installation
 --------------------
 
