@@ -124,7 +124,33 @@ $params = ['limit' => 1];
 
 ##### 发送红包
 
-coming soon
+```php
+use yii\web\ServerErrorHttpException;
+use idarex\pingppyii2\RedEnvelopeForm;
+
+$postData = [
+    'order_no' => '2022222222016',
+    'amount' => 200,
+    'channel' => 'wx',
+    'currency' => 'cny',
+    'subject' => 'idarex pingpp-yii2 tests',
+    'body' => 'idarex pingpp-yii2 tests body',
+    'nickname' => 'bob',
+    'sendName' => 'bob',
+    'recipient' => 'bobchengbin',
+];
+
+$form = new RedEnvelopeForm();
+$form->load($postData, '');
+
+if ($form->create()) {
+    return $form->getData(true);
+} elseif ($form->hasErrors()) {
+    var_dump($form->getErrors());
+} else {
+    throw new ServerErrorHttpException();
+}
+```
 
 ##### 查询红包
 
