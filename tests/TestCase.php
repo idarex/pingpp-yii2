@@ -2,33 +2,11 @@
 
 class TestCase extends PHPUnit_Framework_TestCase
 {
-
-    protected function assignAndGetErrors(\yii\base\Model $form, $field, $value)
-    {
-        $form->$field = $value;
-        $form->validate($field);
-
-        return $form->hasErrors($field);
-    }
-
-    public function assertValidateTrue($form, $field, $value, $message = "")
-    {
-        $this->assertFalse($this->assignAndGetErrors($form, $field, $value), $message);
-    }
-
-    public function assertValidateFalse($form, $field, $value, $message = "")
-    {
-        $this->assertTrue($this->assignAndGetErrors($form, $field, $value), $message);
-    }
-
     public function getAssertValidate($form, $field)
     {
         return function ($value, $message, $assert) use ($form, $field) {
-            if ($assert) {
-                $this->assertValidateTrue($form, $field, $value, $message);
-            } else {
-                $this->assertValidateFalse($form, $field, $value, $message);
-            }
+            $form->$field = $value;
+            $this->assertEquals($assert, $form->validate([$field]), $message);
         };
     }
 
