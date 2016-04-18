@@ -11,6 +11,8 @@ use Pingpp\Charge;
 
 class PingppComponent extends Component
 {
+    use WechatTrait;
+
     public $apiKey;
     public $appId;
 

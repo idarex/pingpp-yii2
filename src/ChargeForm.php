@@ -3,9 +3,11 @@
 namespace idarex\pingppyii2;
 
 use Pingpp\Charge;
+use Pingpp\WxpubOAuth;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use Yii;
+use yii\helpers\Url;
 
 class ChargeForm extends Model
 {
@@ -128,6 +130,33 @@ class ChargeForm extends Model
         } else {
             return $this->_charge->__toStdObject();
         }
+    }
+
+    /**
+     * 获取微信支付时的签名
+     *
+     * @param null|array $charge
+     * @param null|string $url
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getWechatSignature($charge = null, $url = null)
+    {
+        if ($charge === null) {
+            $charge = $this->getCharge(true);
+        }
+
+        if (!isset($charge['credential']) || !isset($charge['credential']['wx_pub'])) {
+            throw new \BadMethodCallException('Credential must be ' . Channel::WX_PUB);
+        }
+
+        $component = $this->getComponent();
+        $jsApiTicket = $component->getJsApiTicket();
+        if ($url === null) {
+            $url = Url::current([], true);
+        }
+
+        return WxpubOAuth::getSignature($this->getCharge(true), $jsApiTicket, $url);
     }
 
     private $componentInstance;

@@ -46,6 +46,9 @@ return [
             'class' => '\idarex\pingppyii2\PingppComponent',
             'apiKey' => '<YOUR_API_KEY>',
             'appId' => '<YOUR_APP_ID>',
+            // !important 微信公众号付款须设置 wxAppId 和 wxAppSecret
+            // 'wxAppId' => '<YOUR_WX_APP_ID>',
+            // 'wxAppSecret' => '<YOUR_WX_APP_SECRET>',
         ],
     ],
 ];
@@ -164,6 +167,20 @@ if ($form->create()) {
 $params = ['limit' => 1,];
 \Yii::$app->pingpp->redEnvelopeList($params);
 ```
+
+##### 微信公众号签名获取
+
+[配置微信公众号 AppId 和 AppSecret](#configuration)
+
+如果使用微信 JS-SDK 来调起支付，需要在创建 charge 后，获取签名（signature），传给 HTML5 SDK。
+
+1. [创建Charge](#付款)
+2. 获取 Wechat 支付 Signature:
+    ```if ($chargeForm->create()) {
+        $wechatSignature = $chargeForm->getWechatSignature();
+        $charge = $chargeForm->getCharge(true);
+    }```
+3. 在 HTML5 SDK 里调用 ```pingpp.createPayment(charge, callback, signature, false);```
 
 #### 微信企业付款
 
