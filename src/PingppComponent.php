@@ -2,6 +2,7 @@
 
 namespace idarex\pingppyii2;
 
+use Pingpp\RedEnvelope;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -97,6 +98,18 @@ class PingppComponent extends Component
         $refunds = $this->getRefunds($chId);
 
         return $refunds->all($params, $opts);
+    }
+
+    /**
+     * 查询指定红包
+     *
+     * @param $redId
+     * @param null|array|string $options
+     * @return RedEnvelope
+     */
+    public function redEnvelopeRetrieve($redId, $options = null)
+    {
+        return RedEnvelope::retrieve($redId, $options);
     }
 
     /**

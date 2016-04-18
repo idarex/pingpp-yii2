@@ -9,6 +9,12 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
+        static::createCharge();
+        static::createRedEnvelop();
+    }
+
+    protected static function createCharge()
+    {
         $chargeForm = new \idarex\pingppyii2\ChargeForm();
         $chargeForm->load(require 'data/charge.php', '');
         $chargeForm->create();
@@ -20,6 +26,16 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
 
         /* @see https://github.com/PingPlusPlus/pingpp-php/issues/24 */
         file_get_contents("https://api.pingxx.com/notify/charges/{$chId}?livemode=false");
+    }
+
+    protected static function createRedEnvelop()
+    {
+        $f = new \idarex\pingppyii2\RedEnvelopeForm();
+        $formData = require 'data/red-envelope.php';
+        $f->load($formData, '');
+        $f->validate() && $f->create();
+        $data = $f->getData(true);
+        Yii::$app->params['redEnvelope.retrieve.redId'] = $data['id'];
     }
 
     /**
@@ -103,6 +119,37 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
         $this->compareDocs($list, 'ListObj');
         if (isset($list->data[0])) {
             $this->compareDocs($list->data[0], 'Refund');
+        }
+    }
+
+    public function testRedEnvelopeRetrieve()
+    {
+        $data = Yii::$app->pingpp->redEnvelopeRetrieve(Yii::$app->params['redEnvelope.retrieve.redId']);
+        $expectKeys = [
+            "id",
+            "object",
+            "created",
+            "received",
+            "refunded",
+            "livemode",
+            "status",
+            "app",
+            "channel",
+            "order_no",
+            "transaction_no",
+            "amount",
+            "amount_settle",
+            "currency",
+            "recipient",
+            "subject",
+            "body",
+            "description",
+            "failure_msg",
+            "extra",
+        ];
+
+        foreach ($expectKeys as $expectKey) {
+            $this->assertArrayHasKey($expectKey, $data);
         }
     }
 

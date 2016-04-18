@@ -152,9 +152,11 @@ if ($form->create()) {
 }
 ```
 
-##### 查询红包
+##### 查询指定微信红包
 
-coming soon
+```php
+\Yii::$app->pingpp->redEnvelopeRetrieve($redId);
+```
 
 #### 微信企业付款
 
