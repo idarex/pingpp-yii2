@@ -9,5 +9,7 @@ v1.1
 - Add `redEnvelopeRetrieve`
 - Add `redEnvelopeList`
 - Add `ChargeForm::getWechatSignature()`
+- Add `eventRetrieve`
+- Add `eventList`
 
 closes: idarex/pingpp-yii2#10 idarex/pingpp-yii2#11 idarex/pingpp-yii2#12

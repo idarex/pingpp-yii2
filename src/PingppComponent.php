@@ -2,6 +2,8 @@
 
 namespace idarex\pingppyii2;
 
+use Pingpp\Collection;
+use Pingpp\Event;
 use Pingpp\RedEnvelope;
 use Yii;
 use yii\base\Component;
@@ -119,7 +121,7 @@ class PingppComponent extends Component
      *
      * @param array $params
      * @param array $options
-     * @return array|\Pingpp\Collection
+     * @return array|Collection
      */
     public function redEnvelopeList($params = [], $options = [])
     {
@@ -127,8 +129,32 @@ class PingppComponent extends Component
     }
 
     /**
+     * 获取指定事件
+     *
+     * @param $eventId
+     * @param array $options
+     * @return Event
+     */
+    public function eventRetrieve($eventId, $options = [])
+    {
+        return Event::retrieve($eventId, $options);
+    }
+
+    /**
+     * 获取事件列表
+     *
+     * @param array $params
+     * @param array $options
+     * @return array|Collection
+     */
+    public function eventList($params = [], $options = [])
+    {
+        return Event::all($params, $options);
+    }
+
+    /**
      * @param $chId
-     * @return \Pingpp\Collection
+     * @return Collection
      */
     protected function getRefunds($chId)
     {

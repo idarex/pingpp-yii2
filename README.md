@@ -182,6 +182,19 @@ $params = ['limit' => 1,];
     }```
 3. 在 HTML5 SDK 里调用 ```pingpp.createPayment(charge, callback, signature, false);```
 
+#### Event 查询
+
+```php
+\Yii::$app->pingpp->eventRetrieve($eventId);
+```
+
+#### Event 列表查询
+
+```php
+$params = ['type' => 'charge.succeeded'];
+\Yii::$app->pingpp->eventList($params);
+```
+
 #### 微信企业付款
 
 ##### 付款

@@ -187,6 +187,43 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testEventList()
+    {
+        $params = ['type' => 'charge.succeeded'];
+        $eventList = yii::$app->pingpp->eventlist($params);
+        $data = $eventList->__toarray(true);
+        $keys = ['object', 'url', 'has_more', 'data'];
+        $this->assertArrayHasKeys($keys, $data);
+
+        $subKeys = [
+            'id',
+            'object',
+            'type',
+            'livemode',
+            'created',
+            'data',
+            'pending_webhooks',
+            'request',
+        ];
+        $this->assertArrayHasKey(0, $data['data']);
+        $this->assertArrayHasKeys($subKeys, $data['data'][0]);
+
+        return $data['data'][0];
+    }
+
+    /**
+     * @depends testEventList
+     */
+    public function testEventRetrieve($eventData)
+    {
+        $this->assertArrayHasKey('id', $eventData);
+        $event = Yii::$app->pingpp->eventRetrieve($eventData['id']);
+        $data = $event->__toarray(true);
+        $keys = ['id', 'object', 'type', 'livemode', 'created', 'pending_webhooks', 'request', 'data'];
+        $this->assertArrayHasKeys($keys, $data);
+    }
+
+
     protected function assertArrayHasKeys($keys, $array)
     {
         foreach ($keys as $item) {
