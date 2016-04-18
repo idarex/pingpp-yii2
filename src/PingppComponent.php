@@ -101,7 +101,7 @@ class PingppComponent extends Component
     }
 
     /**
-     * 查询指定红包
+     * 查询指定微信红包
      *
      * @param $redId
      * @param null|array|string $options
@@ -110,6 +110,18 @@ class PingppComponent extends Component
     public function redEnvelopeRetrieve($redId, $options = null)
     {
         return RedEnvelope::retrieve($redId, $options);
+    }
+
+    /**
+     * 查询微信红包列表
+     *
+     * @param array $params
+     * @param array $options
+     * @return array|\Pingpp\Collection
+     */
+    public function redEnvelopeList($params = [], $options = [])
+    {
+        return RedEnvelope::all($params, $options);
     }
 
     /**

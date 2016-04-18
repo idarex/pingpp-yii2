@@ -158,6 +158,13 @@ if ($form->create()) {
 \Yii::$app->pingpp->redEnvelopeRetrieve($redId);
 ```
 
+##### 查询微信红包列表
+
+```php
+$params = ['limit' => 1,];
+\Yii::$app->pingpp->redEnvelopeList($params);
+```
+
 #### 微信企业付款
 
 ##### 付款

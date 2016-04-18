@@ -148,8 +148,49 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
             "extra",
         ];
 
-        foreach ($expectKeys as $expectKey) {
-            $this->assertArrayHasKey($expectKey, $data);
+        $this->assertArrayHasKeys($expectKeys, $data);
+    }
+
+    public function testRedEnvelopeList()
+    {
+        $params = ['limit' => 1];
+        $list = Yii::$app->pingpp->redEnvelopeList($params);
+        $data = $list->__toArray(true);
+        $keys = ['object', 'url', 'has_more', 'data'];
+        $this->assertArrayHasKeys($keys, $data);
+
+        $subKeys = [
+            'id',
+            'object',
+            'created',
+            'received',
+            'refunded',
+            'livemode',
+            'status',
+            'app',
+            'channel',
+            'order_no',
+            'transaction_no',
+            'amount',
+            'amount_settle',
+            'currency',
+            'recipient',
+            'subject',
+            'body',
+            'description',
+            'failure_msg',
+            'extra',
+            'metadata',
+        ];
+        if (isset($data['data'][0])) {
+            $this->assertArrayHasKeys($subKeys, $data['data'][0]);
+        }
+    }
+
+    protected function assertArrayHasKeys($keys, $array)
+    {
+        foreach ($keys as $item) {
+            $this->assertArrayHasKey($item, $array);
         }
     }
 
