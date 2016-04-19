@@ -20,7 +20,7 @@ class Model extends \yii\base\Model
      *
      * @see https://pingxx.com/document/api#api-metadata
      */
-    public $metadata;
+    public $metadata = [];
 
     public function rules()
     {

@@ -199,7 +199,33 @@ $params = ['type' => 'charge.succeeded'];
 
 ##### 付款
 
-coming soon
+```php
+use yii\web\ServerErrorHttpException;
+use idarex\pingppyii2\TransferForm;
+
+$postData = [
+    'amount' => 100,
+    'order_no' => '20160419',
+    'currency' => 'cny',
+    'channel' => 'wx_pub',
+    'type' => 'b2c',
+    'recipient' => 'o9zpMs9jIaLynQY9N6yxcZ',
+    'description' => 'testing',
+    'user_name' => 'User Name',
+    'force_check' => true,
+];
+
+$form = new TransferForm();
+$form->load($postData, '');
+
+if ($form->create()) {
+    return $form->getData(true);
+} elseif ($form->hasErrors()) {
+    var_dump($form->getErrors());
+} else {
+    throw new ServerErrorHttpException();
+}
+```
 
 ##### 查询
 

@@ -1,6 +1,11 @@
 Pingpp Extension for Yii2 Change Log
 =================
 
+v1.2
+--------------------
+
+- Add `TransferForm` class
+
 v1.1
 --------------------
 
