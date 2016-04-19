@@ -2,7 +2,7 @@
 
 use idarex\pingppyii2\ChargeForm;
 
-class ChargeFormTest extends PHPUnit_Framework_TestCase
+class ChargeFormTest extends TestCase
 {
     public function testCreate()
     {

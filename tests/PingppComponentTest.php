@@ -2,7 +2,7 @@
 
 use idarex\pingppyii2\PingppComponent;
 
-class PingppComponentTest extends PHPUnit_Framework_TestCase
+class PingppComponentTest extends TestCase
 {
     /**
      * Get chId for refunds and others.
@@ -223,13 +223,6 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKeys($keys, $data);
     }
 
-
-    protected function assertArrayHasKeys($keys, $array)
-    {
-        foreach ($keys as $item) {
-            $this->assertArrayHasKey($item, $array);
-        }
-    }
 
     protected function compareDocs($rawData, $class = '')
     {

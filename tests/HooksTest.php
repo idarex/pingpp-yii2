@@ -4,7 +4,7 @@ use idarex\pingppyii2\Hooks;
 use idarex\pingppyii2\PingppComponent;
 use idarex\pingppyii2\HooksInterface;
 
-class HooksTests extends PHPUnit_Framework_TestCase
+class HooksTests extends TestCase
 {
     public function testVerifySign()
     {

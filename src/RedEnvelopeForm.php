@@ -5,13 +5,10 @@ namespace idarex\pingppyii2;
 use Pingpp\PingppObject;
 use Pingpp\RedEnvelope;
 use yii\base\InvalidConfigException;
-use yii\base\Model;
 use Yii;
 
 class RedEnvelopeForm extends Model
 {
-    public $component = 'pingpp';
-
     public $order_no;
     /**
      * @var integer 总金额
@@ -168,25 +165,5 @@ class RedEnvelopeForm extends Model
         }
 
         return $this->_response->__toStdObject();
-    }
-
-    private $componentInstance;
-
-    /**
-     * @return PingppComponent|null|object|string
-     * @throws InvalidConfigException
-     */
-    public function getComponent()
-    {
-        if ($this->componentInstance !== null) {
-            return $this->componentInstance;
-        }
-
-        if (is_string($this->component)) {
-            return $this->componentInstance = Yii::$app->get($this->component);
-        } elseif ($this->component instanceof PingppComponent) {
-            return $this->componentInstance = $this->component;
-        }
-        throw new InvalidConfigException('ping plus plus component config error.');
     }
 }
