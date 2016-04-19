@@ -2,6 +2,9 @@
 
 namespace idarex\pingppyii2;
 
+use Pingpp\Collection;
+use Pingpp\Event;
+use Pingpp\RedEnvelope;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -10,6 +13,8 @@ use Pingpp\Charge;
 
 class PingppComponent extends Component
 {
+    use WechatTrait;
+
     public $apiKey;
     public $appId;
 
@@ -100,8 +105,56 @@ class PingppComponent extends Component
     }
 
     /**
+     * 查询指定微信红包
+     *
+     * @param $redId
+     * @param null|array|string $options
+     * @return RedEnvelope
+     */
+    public function redEnvelopeRetrieve($redId, $options = null)
+    {
+        return RedEnvelope::retrieve($redId, $options);
+    }
+
+    /**
+     * 查询微信红包列表
+     *
+     * @param array $params
+     * @param array $options
+     * @return array|Collection
+     */
+    public function redEnvelopeList($params = [], $options = [])
+    {
+        return RedEnvelope::all($params, $options);
+    }
+
+    /**
+     * 获取指定事件
+     *
+     * @param $eventId
+     * @param array $options
+     * @return Event
+     */
+    public function eventRetrieve($eventId, $options = [])
+    {
+        return Event::retrieve($eventId, $options);
+    }
+
+    /**
+     * 获取事件列表
+     *
+     * @param array $params
+     * @param array $options
+     * @return array|Collection
+     */
+    public function eventList($params = [], $options = [])
+    {
+        return Event::all($params, $options);
+    }
+
+    /**
      * @param $chId
-     * @return \Pingpp\Collection
+     * @return Collection
      */
     protected function getRefunds($chId)
     {

@@ -7,11 +7,12 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=5.4.0",
-    "pingplusplus/pingpp-php": "dev-master",
+    "pingplusplus/pingpp-php": "2.1.3",
     "yiisoft/yii2": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "*"
+    "phpunit/phpunit": "*",
+    "cypresslab/php-curry": "^0.2.0"
   },
   "autoload": {
     "psr-4": {

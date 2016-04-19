@@ -1,9 +1,9 @@
 <?php
 namespace idarex\pingppyii2\CodeAutoCompletion;
 
-use Pingpp\Object;
+use Pingpp\PingppObject;
 
-class Refund extends Object
+class Refund extends PingppObject
 {
     public $id;
     public $object;
@@ -18,4 +18,5 @@ class Refund extends Object
     public $failure_msg;
     public $metadata;
     public $charge;
+    public $transaction_no;
 }

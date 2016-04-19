@@ -2,20 +2,19 @@
 
 namespace idarex\pingppyii2;
 
-use Pingpp\Charge;
-use Pingpp\WxpubOAuth;
+use Pingpp\PingppObject;
+use Pingpp\RedEnvelope;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use Yii;
-use yii\helpers\Url;
 
-class ChargeForm extends Model
+class RedEnvelopeForm extends Model
 {
     public $component = 'pingpp';
 
     public $order_no;
     /**
-     * @var integer 订单总金额
+     * @var integer 总金额
      *
      * 单位为对应币种的最小货币单位
      *
@@ -29,52 +28,73 @@ class ChargeForm extends Model
      * 目前仅支持人民币 cny。
      */
     public $currency;
-    public $client_ip;
     /**
-     * @var string 商品的标题
+     * @var string 红包主题名称
      *
      * 该参数最长为 32 个 Unicode 字符，银联全渠道（upacp/upacp_wap）限制在 32 个字节。
      */
     public $subject;
     /**
-     * @var string 商品的描述信息
+     * @var string 红包祝福语
      *
      * 该参数最长为 128 个 Unicode 字符，yeepay_wap 对于该参数长度限制为 100 个 Unicode 字符。
      */
     public $body;
 
-    /**
-     * @var array 额外参数
-     * 特定渠道发起交易时需要的额外参数以及部分渠道支付成功返回的额外参数。
-     */
-    public $extra = [];
+    public $recipient;
 
     /**
-     * @var integer 订单失效时间
-     *
-     * 用 Unix 时间戳表示。时间范围在订单创建后的 1 分钟到 15 天，默认为 1 天，
-     * 创建时间以 Ping++ 服务器时间为准。
-     * 微信对该参数的有效值限制为 2 小时内；银联对该参数的有效值限制为 1 小时内。
-     */
-    public $time_expire;
-
-    /**
-     * @var array Metadata 元数据。
-     *
-     * @see https://pingxx.com/document/api#api-metadata
-     */
-    public $metadata;
-    /**
-     * @var string 订单附加说明，最多 255 个 Unicode 字符
+     * @var string 备注说明，最多 255 个 Unicode 字符
      */
     public $description;
+
+    public $metadata = [];
+
+    /**
+     * @var string 提供方名称
+     *
+     * 最多 32 个字节
+     */
+    public $nickname;
+    /**
+     * @var string 商户名称
+     *
+     * 最多 32 个字节。
+     */
+    public $sendName;
+
+    /**
+     * @var string 商户 logo 图片的 URL。
+     */
+    public $logo;
+    /**
+     * @var string 分享链接 URL。
+     */
+    public $shareUrl;
+    /**
+     * @var string 分享链接配的文字
+     *
+     * 最多 255 个字节。
+     */
+    public $shareContent;
+    /**
+     * @var string 分享链接配的图片 URL。
+     */
+    public $shareImg;
 
     public function rules()
     {
         return [
-            [['order_no', 'amount', 'channel', 'currency', 'subject', 'body'], 'required'],
-            ['amount', 'number', 'min' => 1],
-            ['channel', 'in', 'range' => Channel::$allChannel],
+            [
+                ['nickname', 'sendName', 'recipient', 'order_no', 'amount', 'channel', 'currency', 'subject', 'body'],
+                'required'
+            ],
+            ['order_no', 'number'],
+            [['nickname', 'sendName'], 'string', 'max' => 32],
+            [['shareContent'], 'string', 'max' => 255],
+            ['order_no', 'string', 'min' => 1, 'max' => 28],
+            ['amount', 'number', 'min' => 100, 'max' => 20000],
+            ['channel', 'in', 'range' => [Channel::WX, Channel::WX_PUB]],
             [
                 'currency',
                 function ($attribute) {
@@ -83,14 +103,14 @@ class ChargeForm extends Model
                     }
                 }
             ],
-            [['client_ip', 'extra', 'time_expire', 'metadata', 'description'], 'safe'],
+            [['description', 'metadata'], 'safe'],
         ];
     }
 
     /**
-     * @var Charge
+     * @var RedEnvelope
      */
-    private $_charge;
+    private $_response;
 
     /**
      * @return bool|\Pingpp\Charge|CodeAutoCompletion\Charge
@@ -99,18 +119,36 @@ class ChargeForm extends Model
     public function create()
     {
         if ($this->validate()) {
-            $this->_charge = \Pingpp\Charge::create([
+            $extra = [
+                'nick_name' => $this->nickname,
+                'send_name' => $this->sendName,
+            ];
+            if ($this->logo !== null) {
+                $extra['logo'] = $this->logo;
+            }
+            if ($this->shareUrl !== null) {
+                $extra['share_url'] = $this->shareUrl;
+            }
+            if ($this->shareContent !== null) {
+                $extra['share_content'] = $this->shareContent;
+            }
+            if ($this->shareImg !== null) {
+                $extra['share_img'] = $this->shareImg;
+            }
+            $this->_response = RedEnvelope::create([
                 'order_no' => $this->order_no,
-                'amount' => $this->amount,
                 'app' => [
                     'id' => $this->getComponent()->appId,
                 ],
                 'channel' => $this->channel,
+                'amount' => $this->amount,
                 'currency' => $this->currency,
-                'client_ip' => $this->client_ip,
                 'subject' => $this->subject,
                 'body' => $this->body,
-                'extra' => $this->extra,
+                'extra' => $extra,
+                'recipient' => $this->recipient,
+                'description' => $this->description,
+                'metadata' => $this->metadata,
             ]);
 
             return true;
@@ -121,42 +159,15 @@ class ChargeForm extends Model
 
     /**
      * @param bool $asArray
-     * @return array|\idarex\pingppyii2\CodeAutoCompletion\Charge
+     * @return array|PingppObject
      */
-    public function getCharge($asArray = false)
+    public function getData($asArray = false)
     {
         if ($asArray) {
-            return $this->_charge->__toArray(true);
-        } else {
-            return $this->_charge->__toStdObject();
-        }
-    }
-
-    /**
-     * 获取微信支付时的签名
-     *
-     * @param null|array $charge
-     * @param null|string $url
-     * @return string
-     * @throws InvalidConfigException
-     */
-    public function getWechatSignature($charge = null, $url = null)
-    {
-        if ($charge === null) {
-            $charge = $this->getCharge(true);
+            return $this->_response->__toArray(true);
         }
 
-        if (!isset($charge['credential']) || !isset($charge['credential']['wx_pub'])) {
-            throw new \BadMethodCallException('Credential must be ' . Channel::WX_PUB);
-        }
-
-        $component = $this->getComponent();
-        $jsApiTicket = $component->getJsApiTicket();
-        if ($url === null) {
-            $url = Url::current([], true);
-        }
-
-        return WxpubOAuth::getSignature($this->getCharge(true), $jsApiTicket, $url);
+        return $this->_response->__toStdObject();
     }
 
     private $componentInstance;

@@ -4,6 +4,11 @@ engines:
     enabled: true
   phpcodesniffer:
     enabled: true
+    checks:
+      PSR2 Classes PropertyDeclaration Underscore:
+        enabled: false
+      CleanCode/StaticAccess:
+        enabled: false
   phpmd:
     enabled: true
 ratings:

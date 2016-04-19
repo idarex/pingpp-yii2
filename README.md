@@ -11,6 +11,8 @@ Pingpp Extension for Yii2
 [![Total Downloads](https://poser.pugx.org/idarex/pingpp-yii2/downloads)](https://packagist.org/packages/idarex/pingpp-yii2)
 [![License](https://poser.pugx.org/idarex/pingpp-yii2/license)](https://packagist.org/packages/idarex/pingpp-yii2)
 
+[CHANGE LOG](CHANGELOG.md)
+
 Installation
 --------------------
 
@@ -44,6 +46,9 @@ return [
             'class' => '\idarex\pingppyii2\PingppComponent',
             'apiKey' => '<YOUR_API_KEY>',
             'appId' => '<YOUR_APP_ID>',
+            // !important 微信公众号付款须设置 wxAppId 和 wxAppSecret
+            // 'wxAppId' => '<YOUR_WX_APP_ID>',
+            // 'wxAppSecret' => '<YOUR_WX_APP_SECRET>',
         ],
     ],
 ];
@@ -74,8 +79,8 @@ $chargeForm->client_ip = Yii::$app->getRequest()->userIP;
 $chargeForm->subject = 'Your Subject';
 $chargeForm->body = 'Your body';
 
-if ($response = $chargeForm->create()) {
-    return $response->__toArray(true);
+if ($chargeForm->create()) {
+    return $chargeForm->getCharge(true);
 } elseif ($chargeForm->hasErrors()) {
     var_dump($chargeForm->getErrors());
 } else {
@@ -122,11 +127,73 @@ $params = ['limit' => 1];
 
 ##### 发送红包
 
-coming soon
+```php
+use yii\web\ServerErrorHttpException;
+use idarex\pingppyii2\RedEnvelopeForm;
 
-##### 查询红包
+$postData = [
+    'order_no' => '2022222222016',
+    'amount' => 200,
+    'channel' => 'wx',
+    'currency' => 'cny',
+    'subject' => 'idarex pingpp-yii2 tests',
+    'body' => 'idarex pingpp-yii2 tests body',
+    'nickname' => 'bob',
+    'sendName' => 'bob',
+    'recipient' => 'bobchengbin',
+];
 
-coming soon
+$form = new RedEnvelopeForm();
+$form->load($postData, '');
+
+if ($form->create()) {
+    return $form->getData(true);
+} elseif ($form->hasErrors()) {
+    var_dump($form->getErrors());
+} else {
+    throw new ServerErrorHttpException();
+}
+```
+
+##### 查询指定微信红包
+
+```php
+\Yii::$app->pingpp->redEnvelopeRetrieve($redId);
+```
+
+##### 查询微信红包列表
+
+```php
+$params = ['limit' => 1,];
+\Yii::$app->pingpp->redEnvelopeList($params);
+```
+
+##### 微信公众号签名获取
+
+[配置微信公众号 AppId 和 AppSecret](#configuration)
+
+如果使用微信 JS-SDK 来调起支付，需要在创建 charge 后，获取签名（signature），传给 HTML5 SDK。
+
+1. [创建Charge](#付款)
+2. 获取 Wechat 支付 Signature:
+    ```if ($chargeForm->create()) {
+        $wechatSignature = $chargeForm->getWechatSignature();
+        $charge = $chargeForm->getCharge(true);
+    }```
+3. 在 HTML5 SDK 里调用 ```pingpp.createPayment(charge, callback, signature, false);```
+
+#### Event 查询
+
+```php
+\Yii::$app->pingpp->eventRetrieve($eventId);
+```
+
+#### Event 列表查询
+
+```php
+$params = ['type' => 'charge.succeeded'];
+\Yii::$app->pingpp->eventList($params);
+```
 
 #### 微信企业付款
 
