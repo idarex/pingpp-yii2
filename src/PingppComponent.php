@@ -5,6 +5,7 @@ namespace idarex\pingppyii2;
 use Pingpp\Collection;
 use Pingpp\Event;
 use Pingpp\RedEnvelope;
+use Pingpp\Transfer;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -187,5 +188,30 @@ class PingppComponent extends Component
     protected function getRefunds($chId)
     {
         return Charge::retrieve($chId)->refunds;
+    }
+
+    /**
+     * 查询 Transfer 列表
+     *
+     * @param array $params
+     * @param array $options
+     *
+     * @return Transfer[]
+     */
+    public function transferList($params = [], $options = [])
+    {
+        return Transfer::all($params, $options);
+    }
+
+    /**
+     * 查询指定 transfer 对象
+     *
+     * @param string $transferId The ID of the transfer to retrieve.
+     * @param array|string|null $options
+     * @return Transfer
+     */
+    public function transferRetrieve($transferId, $options = null)
+    {
+        return Transfer::retrieve($transferId, $options);
     }
 }

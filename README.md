@@ -231,7 +231,18 @@ if ($form->create()) {
 
 ##### 查询
 
-coming soon
+查询 Transfer 列表
+
+```php
+$params = ['limit' => 1];
+\Yii::$app->pingpp->transferList($params);
+```
+
+查询指定 Transfer
+
+```php
+\Yii::$app->pingpp->transferRetrieve($transferId);
+```
 
 #### 接收 Webhooks 通知
 

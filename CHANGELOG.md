@@ -6,6 +6,8 @@ v1.2
 
 - Add `TransferForm` class
 - Add `设置请求签名密钥`
+- Add `transferList`
+- Add `transferRetrieve`
 
 v1.1
 --------------------

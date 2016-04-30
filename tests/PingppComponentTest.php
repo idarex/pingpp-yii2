@@ -237,6 +237,71 @@ class PingppComponentTest extends TestCase
         $this->assertArrayHasKeys($keys, $data);
     }
 
+
+    public function testTransferList()
+    {
+        $params = ['limit' => 1];
+        $list = yii::$app->pingpp->transferList($params);
+        $data = $list->__toarray(true);
+        $keys = ['object', 'url', 'has_more', 'data'];
+        $this->assertArrayHasKeys($keys, $data);
+
+        $subKeys = [
+            'id',
+            'object',
+            'type',
+            'livemode',
+            'created',
+            'time_transferred',
+            'status',
+            'channel',
+            'order_no',
+            'batch_no',
+            'amount',
+            'amount_settle',
+            'currency',
+            'recipient',
+            'description',
+            'transaction_no',
+            'failure_msg'
+        ];
+        $this->assertArrayHasKey(0, $data['data']);
+        $this->assertArrayHasKeys($subKeys, $data['data'][0]);
+
+        return $data['data'][0];
+    }
+
+    /**
+     * @depends testTransferList
+     * @param array $transfer
+     */
+    public function testTransferRetrieve($transfer)
+    {
+        $this->assertArrayHasKey('id', $transfer);
+        $event = Yii::$app->pingpp->transferRetrieve($transfer['id']);
+        $data = $event->__toarray(true);
+        $keys = [
+            'id',
+            'object',
+            'type',
+            'livemode',
+            'created',
+            'time_transferred',
+            'status',
+            'channel',
+            'order_no',
+            'batch_no',
+            'amount',
+            'amount_settle',
+            'currency',
+            'recipient',
+            'description',
+            'transaction_no',
+            'failure_msg'
+        ];
+        $this->assertArrayHasKeys($keys, $data);
+    }
+
     protected function compareDocs($rawData, $class = '')
     {
         $reflectionClass = new ReflectionClass('\idarex\pingppyii2\CodeAutoCompletion\\' . $class);
