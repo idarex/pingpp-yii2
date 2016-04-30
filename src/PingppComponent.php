@@ -19,6 +19,20 @@ class PingppComponent extends Component
     public $appId;
 
     /**
+     * 请求签名公钥文件的路径
+     * 支持路径别名
+     * @var string
+     */
+    public $publicKeyPath;
+
+    /**
+     * 请求签名私钥文件的路径
+     * 支持路径别名
+     * @var string
+     */
+    public $privateKeyPath;
+
+    /**
      * @throws InvalidConfigException
      */
     public function init()
@@ -29,7 +43,17 @@ class PingppComponent extends Component
         if ($this->appId === null) {
             throw new InvalidConfigException('The appId property must be set.');
         }
+
         Pingpp::setApiKey($this->apiKey);
+
+        if (!empty($this->privateKeyPath)) {
+            $privateKeyFullPath = Yii::getAlias($this->privateKeyPath);
+            if (!file_exists($privateKeyFullPath)) {
+                throw new InvalidConfigException('The private key file not exists.');
+            }
+
+            Pingpp::setPrivateKeyPath($privateKeyFullPath);
+        }
     }
 
     /**
