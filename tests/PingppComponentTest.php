@@ -70,6 +70,20 @@ class PingppComponentTest extends TestCase
         ]);
     }
 
+    /**
+     * @expectedException \yii\base\InvalidConfigException
+     */
+    public function testInvalidExceptionWithInvalidPrivateKeyPath()
+    {
+        Yii::createObject([
+            'class' => PingppComponent::className(),
+            'apiKey' => 'sk_test_ibbTe5jLGCi5rzfH4OqPW9KC',
+            'appId' => 'app_1Gqj58ynP0mHeX1q',
+            'privateKeyPath' => 'invalid_private_key.pem',
+        ]);
+    }
+
+
     public function testRefunds()
     {
         $amount = 1;
@@ -222,7 +236,6 @@ class PingppComponentTest extends TestCase
         $keys = ['id', 'object', 'type', 'livemode', 'created', 'pending_webhooks', 'request', 'data'];
         $this->assertArrayHasKeys($keys, $data);
     }
-
 
     protected function compareDocs($rawData, $class = '')
     {

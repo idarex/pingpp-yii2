@@ -31,4 +31,39 @@ class ChargeFormTest extends TestCase
         $signature = $chargeForm->getWechatSignature(null, 'https://m.idarex.com');
         $this->assertNotEmpty($signature, 'Signature can not be empty');
     }
+
+    /**
+     * @depends testCreate
+     */
+    public function testCreateWithPrivateKeyPath()
+    {
+        $config = Yii::$app->getComponents()['pingpp'];
+        $config['privateKeyPath'] = 'rsa_private_key.pem';
+        $component = Yii::createObject($config);
+
+        $chargeForm = new ChargeForm();
+        $chargeForm->component = $component;
+        $chargeForm->load(require 'data/charge.php', '');
+
+        $this->assertTrue($chargeForm->validate() && $chargeForm->create());
+        $this->assertTrue(is_array($chargeForm->getCharge(true)));
+    }
+
+    /**
+     * @depends testCreate
+     */
+    public function testCreateWithPrivateKey()
+    {
+        $config = Yii::$app->getComponents()['pingpp'];
+        $config['privateKey'] = file_get_contents('rsa_private_key.pem');
+
+        $component = Yii::createObject($config);
+
+        $chargeForm = new ChargeForm();
+        $chargeForm->component = $component;
+        $chargeForm->load(require 'data/charge.php', '');
+
+        $this->assertTrue($chargeForm->validate() && $chargeForm->create());
+        $this->assertTrue(is_array($chargeForm->getCharge(true)));
+    }
 }

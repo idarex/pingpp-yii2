@@ -49,6 +49,8 @@ return [
             // !important 微信公众号付款须设置 wxAppId 和 wxAppSecret
             // 'wxAppId' => '<YOUR_WX_APP_ID>',
             // 'wxAppSecret' => '<YOUR_WX_APP_SECRET>',
+            // 'privateKeyPath' => '<YOUR_RSA_PRIVATE_KEY_PATH>', // 设置这个了就不用设置 privateKey 了
+            // 'privateKey' => '<YOUR_RSA_PRIVATE_KEY_CONTENT>',
         ],
     ],
 ];
