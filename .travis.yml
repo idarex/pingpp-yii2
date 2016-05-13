@@ -7,6 +7,8 @@ install:
   - composer global require "fxp/composer-asset-plugin:~1.1.1"
   - composer require codeclimate/php-test-reporter --dev
   - composer install --no-progress --no-interaction
+  - sed -ie 's#\$opts\[CURLOPT_CONNECTTIMEOUT\] = 30;#\$opts\[CURLOPT_CONNECTTIMEOUT\] = 300;#g' vendor/pingplusplus/pingpp-php/lib/ApiRequestor.php
+  - sed -ie 's#\$opts\[CURLOPT_TIMEOUT\] = 80;#\$opts\[CURLOPT_TIMEOUT\] = 800;#g' vendor/pingplusplus/pingpp-php/lib/ApiRequestor.php
 
 script:
   - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
