@@ -49,6 +49,8 @@ return [
             // !important 微信公众号付款须设置 wxAppId 和 wxAppSecret
             // 'wxAppId' => '<YOUR_WX_APP_ID>',
             // 'wxAppSecret' => '<YOUR_WX_APP_SECRET>',
+            // 'privateKeyPath' => '<YOUR_RSA_PRIVATE_KEY_PATH>', // 设置这个了就不用设置 privateKey 了
+            // 'privateKey' => '<YOUR_RSA_PRIVATE_KEY_CONTENT>',
         ],
     ],
 ];
@@ -199,11 +201,48 @@ $params = ['type' => 'charge.succeeded'];
 
 ##### 付款
 
-coming soon
+```php
+use yii\web\ServerErrorHttpException;
+use idarex\pingppyii2\TransferForm;
+
+$postData = [
+    'amount' => 100,
+    'order_no' => '20160419',
+    'currency' => 'cny',
+    'channel' => 'wx_pub',
+    'type' => 'b2c',
+    'recipient' => 'o9zpMs9jIaLynQY9N6yxcZ',
+    'description' => 'testing',
+    'user_name' => 'User Name',
+    'force_check' => true,
+];
+
+$form = new TransferForm();
+$form->load($postData, '');
+
+if ($form->create()) {
+    return $form->getData(true);
+} elseif ($form->hasErrors()) {
+    var_dump($form->getErrors());
+} else {
+    throw new ServerErrorHttpException();
+}
+```
 
 ##### 查询
 
-coming soon
+查询 Transfer 列表
+
+```php
+$params = ['limit' => 1];
+\Yii::$app->pingpp->transferList($params);
+```
+
+查询指定 Transfer
+
+```php
+\Yii::$app->pingpp->transferRetrieve($transferId);
+```
 
 #### 接收 Webhooks 通知
 

@@ -12,6 +12,8 @@ use yii\web\ForbiddenHttpException;
 /**
  * Class HooksRoute
  * @package idarex\pingppyii2
+ *
+ * @property string $publicKey
  */
 class Hooks extends Component
 {
@@ -24,26 +26,34 @@ class Hooks extends Component
     public $headers;
     public $signature;
 
-    private $_publicKey;
-
+    /**
+     * @deprecated will be removed in version 1.3, deprecated since version 1.2
+     * @see PingppComponent::$publicKey
+     * @see PingppComponent::$publicKeyPath
+     */
     public function getPublicKey()
     {
-        return $this->_publicKey;
+        return $this->getComponent()->publicKey;
     }
 
+    /**
+     * @deprecated will be removed in version 1.3, deprecated since version 1.2
+     * @see PingppComponent::$publicKey
+     * @see PingppComponent::$publicKeyPath
+     */
     public function setPublicKey($publicKey)
     {
-        $this->_publicKey = $publicKey;
+        $this->getComponent()->publicKey = $publicKey;
     }
 
+    /**
+     * @deprecated will be removed in version 1.3, deprecated since version 1.2
+     * @see PingppComponent::$publicKey
+     * @see PingppComponent::$publicKeyPath
+     */
     public function setPublicKeyPath($path)
     {
-        $file = Yii::getAlias($path);
-        if (file_exists($file) && $content = file_get_contents($file)) {
-            $this->_publicKey = $content;
-        } else {
-            throw new InvalidConfigException('The publicKeyPath must be a file as pem.');
-        }
+        $this->getComponent()->publicKeyPath = $path;
     }
 
     public function verify($rawData)
@@ -51,7 +61,7 @@ class Hooks extends Component
         $headers = $this->headers === null ? Yii::$app->request->getHeaders() : $this->headers;
         $signature = $this->signature === null ? $headers->get('x-pingplusplus-signature') : $this->signature;
 
-        return self::verifySign($rawData, $signature, $this->_publicKey);
+        return self::verifySign($rawData, $signature, $this->getComponent()->publicKey);
     }
 
     public static function verifySign($rawData, $signature, $publicKey)

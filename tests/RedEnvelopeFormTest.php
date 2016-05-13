@@ -46,6 +46,7 @@ class RedEnvelopeFormTests extends TestCase
 
     public function testCreate()
     {
+        sleep(61);
         $f = new RedEnvelopeForm();
         $formData = require 'data/red-envelope.php';
         $f->load($formData, '');

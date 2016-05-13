@@ -1,6 +1,15 @@
 Pingpp Extension for Yii2 Change Log
 =================
 
+v1.2
+--------------------
+
+- Add `TransferForm` class
+- Add `设置请求签名密钥`
+- Add `transferList`
+- Add `transferRetrieve`
+- Modify `$publicKey` and `$publicKeyPath` are recommended setting in `PingppComponent`
+
 v1.1
 --------------------
 

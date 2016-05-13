@@ -3,7 +3,7 @@
 use idarex\pingppyii2\Channel;
 use idarex\pingppyii2\ChannelException;
 
-class ChannelTest extends PHPUnit_Framework_TestCase
+class ChannelTest extends TestCase
 {
     /**
      * @expectedException \idarex\pingppyii2\ChannelException

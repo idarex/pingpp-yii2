@@ -33,4 +33,12 @@ class TestCase extends PHPUnit_Framework_TestCase
             $func($row[0], $row[1], $row[2]);
         }
     }
+
+    protected function assertArrayHasKeys($keys, $array)
+    {
+        foreach ($keys as $item) {
+            $this->assertArrayHasKey($item, $array);
+        }
+    }
+
 }

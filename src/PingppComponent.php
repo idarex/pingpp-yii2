@@ -5,18 +5,69 @@ namespace idarex\pingppyii2;
 use Pingpp\Collection;
 use Pingpp\Event;
 use Pingpp\RedEnvelope;
+use Pingpp\Transfer;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use Pingpp\Pingpp;
 use Pingpp\Charge;
 
+/**
+ * Class PingppComponent
+ * @package idarex\pingppyii2
+ *
+ * @property-write string $publicKeyPath 请求签名公钥文件的路径
+ * @property string $publicKey 请求签名公钥内容
+ */
 class PingppComponent extends Component
 {
     use WechatTrait;
 
     public $apiKey;
     public $appId;
+
+    /**
+     * 请求签名私钥文件的路径
+     * 支持路径别名
+     *
+     * @see Yii::getAlias()
+     * @var string
+     */
+    public $privateKeyPath;
+
+    /**
+     * 设置私钥内容
+     *
+     * @var string
+     */
+    public $privateKey;
+
+    private $_publicKey;
+
+    /**
+     * @param string $path
+     * @throws InvalidConfigException
+     */
+    public function setPublicKeyPath($path)
+    {
+        if (!$path || !file_exists($fullPath = Yii::getAlias($path))) {
+            throw new InvalidConfigException('The public key file not exists.');
+        }
+        $this->_publicKey = file_get_contents($fullPath);
+    }
+
+    public function getPublicKey()
+    {
+        return $this->_publicKey;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function setPublicKey($content)
+    {
+        $this->_publicKey = $content;
+    }
 
     /**
      * @throws InvalidConfigException
@@ -29,7 +80,19 @@ class PingppComponent extends Component
         if ($this->appId === null) {
             throw new InvalidConfigException('The appId property must be set.');
         }
+
         Pingpp::setApiKey($this->apiKey);
+
+        if (!empty($this->privateKeyPath)) {
+            $privateKeyFullPath = Yii::getAlias($this->privateKeyPath);
+            if (!file_exists($privateKeyFullPath)) {
+                throw new InvalidConfigException('The private key file not exists.');
+            }
+
+            Pingpp::setPrivateKeyPath($privateKeyFullPath);
+        } elseif (!empty($this->privateKey)) {
+            Pingpp::setPrivateKey($this->privateKey);
+        }
     }
 
     /**
@@ -159,5 +222,30 @@ class PingppComponent extends Component
     protected function getRefunds($chId)
     {
         return Charge::retrieve($chId)->refunds;
+    }
+
+    /**
+     * 查询 Transfer 列表
+     *
+     * @param array $params
+     * @param array $options
+     *
+     * @return Transfer[]
+     */
+    public function transferList($params = [], $options = [])
+    {
+        return Transfer::all($params, $options);
+    }
+
+    /**
+     * 查询指定 transfer 对象
+     *
+     * @param string $transferId The ID of the transfer to retrieve.
+     * @param array|string|null $options
+     * @return Transfer
+     */
+    public function transferRetrieve($transferId, $options = null)
+    {
+        return Transfer::retrieve($transferId, $options);
     }
 }

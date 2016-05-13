@@ -5,14 +5,11 @@ namespace idarex\pingppyii2;
 use Pingpp\Charge;
 use Pingpp\WxpubOAuth;
 use yii\base\InvalidConfigException;
-use yii\base\Model;
 use Yii;
 use yii\helpers\Url;
 
 class ChargeForm extends Model
 {
-    public $component = 'pingpp';
-
     public $order_no;
     /**
      * @var integer 订单总金额
@@ -44,12 +41,6 @@ class ChargeForm extends Model
     public $body;
 
     /**
-     * @var array 额外参数
-     * 特定渠道发起交易时需要的额外参数以及部分渠道支付成功返回的额外参数。
-     */
-    public $extra = [];
-
-    /**
      * @var integer 订单失效时间
      *
      * 用 Unix 时间戳表示。时间范围在订单创建后的 1 分钟到 15 天，默认为 1 天，
@@ -59,19 +50,13 @@ class ChargeForm extends Model
     public $time_expire;
 
     /**
-     * @var array Metadata 元数据。
-     *
-     * @see https://pingxx.com/document/api#api-metadata
-     */
-    public $metadata;
-    /**
      * @var string 订单附加说明，最多 255 个 Unicode 字符
      */
     public $description;
 
     public function rules()
     {
-        return [
+        return array_merge([
             [['order_no', 'amount', 'channel', 'currency', 'subject', 'body'], 'required'],
             ['amount', 'number', 'min' => 1],
             ['channel', 'in', 'range' => Channel::$allChannel],
@@ -83,8 +68,8 @@ class ChargeForm extends Model
                     }
                 }
             ],
-            [['client_ip', 'extra', 'time_expire', 'metadata', 'description'], 'safe'],
-        ];
+            [['client_ip', 'time_expire', 'description'], 'safe'],
+        ], parent::rules());
     }
 
     /**
@@ -157,25 +142,5 @@ class ChargeForm extends Model
         }
 
         return WxpubOAuth::getSignature($this->getCharge(true), $jsApiTicket, $url);
-    }
-
-    private $componentInstance;
-
-    /**
-     * @return PingppComponent|null|object|string
-     * @throws InvalidConfigException
-     */
-    public function getComponent()
-    {
-        if ($this->componentInstance !== null) {
-            return $this->componentInstance;
-        }
-
-        if (is_string($this->component)) {
-            return $this->componentInstance = Yii::$app->get($this->component);
-        } elseif ($this->component instanceof PingppComponent) {
-            return $this->componentInstance = $this->component;
-        }
-        throw new InvalidConfigException('ping plus plus component config error.');
     }
 }

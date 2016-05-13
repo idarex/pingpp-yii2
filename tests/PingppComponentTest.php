@@ -2,7 +2,7 @@
 
 use idarex\pingppyii2\PingppComponent;
 
-class PingppComponentTest extends PHPUnit_Framework_TestCase
+class PingppComponentTest extends TestCase
 {
     /**
      * Get chId for refunds and others.
@@ -69,6 +69,20 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
             'appId' => 'app_1Gqj58ynP0mHeX1q',
         ]);
     }
+
+    /**
+     * @expectedException \yii\base\InvalidConfigException
+     */
+    public function testInvalidExceptionWithInvalidPrivateKeyPath()
+    {
+        Yii::createObject([
+            'class' => PingppComponent::className(),
+            'apiKey' => 'sk_test_ibbTe5jLGCi5rzfH4OqPW9KC',
+            'appId' => 'app_1Gqj58ynP0mHeX1q',
+            'privateKeyPath' => 'invalid_private_key.pem',
+        ]);
+    }
+
 
     public function testRefunds()
     {
@@ -224,11 +238,68 @@ class PingppComponentTest extends PHPUnit_Framework_TestCase
     }
 
 
-    protected function assertArrayHasKeys($keys, $array)
+    public function testTransferList()
     {
-        foreach ($keys as $item) {
-            $this->assertArrayHasKey($item, $array);
-        }
+        $params = ['limit' => 1];
+        $list = yii::$app->pingpp->transferList($params);
+        $data = $list->__toarray(true);
+        $keys = ['object', 'url', 'has_more', 'data'];
+        $this->assertArrayHasKeys($keys, $data);
+
+        $subKeys = [
+            'id',
+            'object',
+            'type',
+            'livemode',
+            'created',
+            'time_transferred',
+            'status',
+            'channel',
+            'order_no',
+            'batch_no',
+            'amount',
+            'amount_settle',
+            'currency',
+            'recipient',
+            'description',
+            'transaction_no',
+            'failure_msg'
+        ];
+        $this->assertArrayHasKey(0, $data['data']);
+        $this->assertArrayHasKeys($subKeys, $data['data'][0]);
+
+        return $data['data'][0];
+    }
+
+    /**
+     * @depends testTransferList
+     * @param array $transfer
+     */
+    public function testTransferRetrieve($transfer)
+    {
+        $this->assertArrayHasKey('id', $transfer);
+        $event = Yii::$app->pingpp->transferRetrieve($transfer['id']);
+        $data = $event->__toarray(true);
+        $keys = [
+            'id',
+            'object',
+            'type',
+            'livemode',
+            'created',
+            'time_transferred',
+            'status',
+            'channel',
+            'order_no',
+            'batch_no',
+            'amount',
+            'amount_settle',
+            'currency',
+            'recipient',
+            'description',
+            'transaction_no',
+            'failure_msg'
+        ];
+        $this->assertArrayHasKeys($keys, $data);
     }
 
     protected function compareDocs($rawData, $class = '')
